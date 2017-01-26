@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
      * <p/>
      * but consider the case where the JsonTask is finished immediately and tries to set the result your view may not be initialzed since
      * the Task finished before creating the view.
-     * also going back won't reinitialze your view and the button won't work
+     * also going back won't reinitialze your view and the button won't work you need to do this on back pressed again instead of
+     * utilizing oncreate
      * <p/>
      * Things you can research:
      * Race condition: https://en.wikipedia.org/wiki/Race_condition
@@ -201,6 +202,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         input = (EditText) findViewById(R.id.input_location);
         bt = (Button) findViewById(R.id.btn);
+        //
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String location = input.getText().toString();
+                new JsonTask().execute("http://api.openweathermap.org/data/2.5/weather?APPID=924811d4d4cb3f3219d7a95c2f0fc61a&q=" + location + "&mode=json");
+
+                //I moved this part to displayResult();
+
+            }
+        });
     }
 
 }
